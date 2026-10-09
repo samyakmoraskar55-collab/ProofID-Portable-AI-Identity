@@ -1,0 +1,8 @@
+{
+  "contractAddress": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+  "network": "hardhat",
+  "chainId": 31337,
+  "txHash": "0x217db18ca6d8678f27874d25e12c04a551c1e02ff456e7df43fc9fa567caa45c",
+  "deployedAt": "2026-10-05T15:47:26.578Z"
+}
