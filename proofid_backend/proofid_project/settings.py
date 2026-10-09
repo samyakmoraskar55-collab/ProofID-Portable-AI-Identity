@@ -15,7 +15,19 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-proofid-dev-key-cha
 
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+allowed_hosts_raw = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,.onrender.com')
+ALLOWED_HOSTS = ['*'] if DEBUG else [h.strip() for h in allowed_hosts_raw.split(',') if h.strip()]
+if '.onrender.com' not in ALLOWED_HOSTS and '*' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('.onrender.com')
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://*.onrender.com',
+]
+csrf_env = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+if csrf_env:
+    CSRF_TRUSTED_ORIGINS.extend([origin.strip() for origin in csrf_env.split(',') if origin.strip()])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -35,6 +47,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,9 +100,10 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR.parent / 'frontend' / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 

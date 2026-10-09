@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: proofid-platform
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn --chdir proofid_backend proofid_project.wsgi:application"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: DEMO_MODE
+        value: "True"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://*.onrender.com"
+      - key: MONAD_TESTNET_RPC_URL
+        value: "https://testnet-rpc.monad.xyz"
+      - key: PROOF_ID_CONTRACT_ADDRESS
+        value: "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+      - key: MONAD_CHAIN_ID
+        value: "10143"
+      - key: MONAD_EXPLORER_URL
+        value: "https://testnet.monadexplorer.com"

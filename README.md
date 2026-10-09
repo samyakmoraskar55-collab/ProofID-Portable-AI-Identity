@@ -204,6 +204,40 @@ npx hardhat run scripts/deploy.js --network monadTestnet
 
 ---
 
+## ☁️ Deploying to Render (Fast & Easy)
+
+This repository includes a pre-configured [`render.yaml`](render.yaml), `build.sh`, and `requirements.txt` for 1-click or manual deployment on [Render](https://dashboard.render.com/).
+
+### Method 1: Blueprint Deployment (Recommended)
+1. Log in to [dashboard.render.com](https://dashboard.render.com/).
+2. Click **New +** → Select **Blueprint**.
+3. Connect your GitHub repository: `samyakmoraskar55-collab/ProofID-Portable-AI-Identity`.
+4. Render will automatically detect `render.yaml` and configure:
+   - **Service Name:** `proofid-platform`
+   - **Environment:** `Python`
+   - **Build Command:** `./build.sh` (installs deps, runs migrations, collects static files, seeds demo accounts)
+   - **Start Command:** `gunicorn --chdir proofid_backend proofid_project.wsgi:application`
+5. Click **Apply** to deploy!
+
+### Method 2: Manual Web Service Setup
+1. On Render Dashboard, click **New +** → **Web Service**.
+2. Select your repository `ProofID-Portable-AI-Identity`.
+3. Fill in the following settings:
+   - **Name:** `proofid-platform`
+   - **Runtime:** `Python 3`
+   - **Build Command:** `./build.sh`
+   - **Start Command:** `gunicorn --chdir proofid_backend proofid_project.wsgi:application`
+4. Under **Advanced** / **Environment Variables**, add:
+   - `PYTHON_VERSION`: `3.11.9`
+   - `DEBUG`: `False`
+   - `DEMO_MODE`: `True`
+   - `ALLOWED_HOSTS`: `*`
+   - `DJANGO_SECRET_KEY`: *(Generate or enter any secret key)*
+   - `CSRF_TRUSTED_ORIGINS`: `https://*.onrender.com`
+5. Click **Create Web Service**.
+
+---
+
 ## 📡 REST API Reference
 
 | Method | Endpoint | Description | Auth Required |
